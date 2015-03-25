@@ -1,0 +1,73 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <style name="Sliding_menu_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/lightgray</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Sliding_menu_img_style">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <style name="Sliding_menu_layout_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:background">@drawable/menu_bg_selector</item>
+        <item name="android:clickable">true</item>
+    </style>
+    
+      <!-- activity进入分层 -->
+    <style name="ActivityTransitions" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_back</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_forward</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+    <style name="SlideAppTheme" parent="@android:style/Theme.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
+    </style>
+    
+    <!-- Channel 专用 -->
+    <style name="subscribe_my_tip_text">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/subscribe_tip_text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--分割线  0.5dip高  -->
+     <style name="subscribe_seperate_line">
+        <item name="android:background">@color/subscribe_seperate_line</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">0.5dip</item>
+        <item name="android:layout_marginTop">14.0dip</item>
+        <item name="android:layout_marginBottom">14.0dip</item>
+    </style>
+    
+
+</resources>

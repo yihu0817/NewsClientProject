@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/subscribe_activity_bg" >
+
+    <RelativeLayout
+        android:id="@+id/channel_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/news_title_bgn_read" >
+
+        <ImageView
+            android:id="@+id/channel_title_headpic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="7.5dp"
+            android:clickable="true"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/back_action_selector" />
+
+        <TextView
+            android:id="@+id/channel_title_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/channel_manager_title"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/channel_title_layout" >
+
+        <!-- subscribe 订阅 -->
+
+        <RelativeLayout
+            android:id="@+id/subscribe_main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/subscribe_bg"
+            android:orientation="vertical"
+            android:paddingBottom="14.0dip" >
+
+            <TextView
+                android:id="@+id/my_category_text"
+                style="@style/subscribe_my_tip_text"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginTop="14.0dip"
+                android:text="@string/channel_my_channel" />
+
+            <TextView
+                android:id="@+id/my_category_tip_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12.0dip"
+                android:layout_alignBaseline="@id/my_category_text"
+                android:layout_toRightOf="@id/my_category_text"
+                android:text="@string/channel_my_channel_info"
+                android:textColor="@color/subscribe_tip_text"
+                android:textSize="11.0sp" />
+
+            <!-- 分割线 -->
+
+            <View
+                android:id="@+id/seperate_line"
+                style="@style/subscribe_seperate_line"
+                android:layout_below="@id/my_category_text" />
+            <!-- android:listSelector  设置选中状态为透明色,去除选中时的黄色底色 -->
+            <!-- android:stretchMode=”columnWidth"     //缩放与列宽大小同步 -->
+            <!-- android:cacheColorHint="#00000000" //去除拖动时默认的黑色背景 -->
+            <!-- android:scrollbars="none"    //隐藏GridView的滚动条 -->
+
+            <com.warmtel.android.common.widget.DragGrid
+                android:id="@+id/userGridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seperate_line"
+                android:layout_marginLeft="14dip"
+                android:layout_marginRight="14dip"
+                android:gravity="center"
+                android:horizontalSpacing="14dip"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
+                android:scrollbars="vertical"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="14.0px" />
+
+
+            <View
+                android:id="@+id/seperate_line2"
+                style="@style/subscribe_seperate_line"
+                android:layout_below="@id/userGridView" />
+
+            <!-- More channel -->
+
+            <TextView
+                android:id="@+id/more_category_text"
+                style="@style/subscribe_my_tip_text"
+                android:layout_below="@id/seperate_line2"
+                android:layout_marginBottom="14.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/channel_more_channel"
+                android:textSize="13sp" />
+
+            <com.warmtel.android.common.widget.OtherGridView
+                android:id="@+id/otherGridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/more_category_text"
+                android:layout_marginLeft="14dip"
+                android:layout_marginRight="14dip"
+                android:gravity="center"
+                android:horizontalSpacing="14dip"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
+                android:scrollbars="vertical"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="14.0px" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/category_layout"
+        layout="@layout/channel_item"
+        android:visibility="gone" />
+
+</RelativeLayout>

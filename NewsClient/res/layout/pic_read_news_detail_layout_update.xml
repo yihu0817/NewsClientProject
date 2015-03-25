@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black" >
+    <ImageView
+        android:id="@+id/pic_read_showPic"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" 
+        android:background="@drawable/base_article_bigimage"
+        />
+
+    <ProgressBar
+        android:id="@+id/pic_read_load_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/pic_read_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pic_read_showPic"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/pic_read_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/pic_read_showPic"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/pic_read_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pic_read_title"
+        android:layout_margin="5dp"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</RelativeLayout>

@@ -1,0 +1,15 @@
+INDEX VERSION 1.126+E:\IdeaProjects\NewsClientProject\.metadata\.plugins\org.eclipse.jdt.core
+2241593096.index
+2545725016.index
+3135607777.index
+1591162297.index
+49418688.index
+2211984705.index
+3218052551.index
+1530766168.index
+2758611000.index
+847510082.index
+3997182665.index
+3335681487.index
+4175689145.index
+2804811754.index

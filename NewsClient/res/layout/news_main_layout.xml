@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/news_main_child_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:id="@+id/mian_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/darkred" >
+
+            <ImageView
+                android:id="@+id/main_title_headpic"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="2.5dp"
+                android:clickable="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_round_head_new" />
+
+            <TextView
+                android:id="@+id/main_title_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="新聞快訊"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/channel_manager_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mian_title_layout"
+            android:background="@color/tab_gray"
+            android:clickable="true"
+            android:contentDescription="@null"
+            android:src="@drawable/channel_glide_selector" />
+
+        <com.warmtel.android.common.widget.PagerSlidingTabStripMine
+            xmlns:attrstest="http://schemas.android.com/apk/res/com.scxh.mian"
+            android:id="@+id/pagerSlidingTabstrip"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/mian_title_layout"
+            android:layout_toLeftOf="@id/channel_manager_pic" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pagerSlidingTabstrip" >
+        </android.support.v4.view.ViewPager>
+    </RelativeLayout>
+
+</FrameLayout>

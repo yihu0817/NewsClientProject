@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.warmtel.android"
+    android:id="@+id/news_main_child_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.warmtel.android.common.widget.MyOneCustomTitleBar
+        android:id="@+id/readnews_custom_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        custom:left_icon_cust="@drawable/default_round_head_new"
+        custom:middle_txt_cust="@string/main_news_title" />
+
+    <ImageView
+        android:id="@+id/channel_manager_pic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/readnews_custom_titlebar"
+        android:background="@color/tab_gray"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:onClick="onChannelClicked"
+        android:src="@drawable/channel_glide_selector" />
+
+    <com.warmtel.android.common.widget.PagerSlidingTabStripMine
+        xmlns:attrstest="http://schemas.android.com/apk/res/com.scxh.mian"
+        android:id="@+id/pagerSlidingTabstrip"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/readnews_custom_titlebar"
+        android:layout_toLeftOf="@+id/channel_manager_pic" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pagerSlidingTabstrip" >
+    </android.support.v4.view.ViewPager>
+
+    <ImageView
+        android:id="@+id/start_pic_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/start_pic_1"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+
+</RelativeLayout>

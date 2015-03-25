@@ -1,0 +1,27 @@
+<resources>
+
+    <string name="app_name">每日新讯</string>
+    <string name="listpage_footer_text">加载中</string>
+    <string name="listpage_scroll_label">滚动加载更多</string>
+    <string name="frage_content_title">Test  Tiltle</string>
+    <string name="frage_content_info">Test content,Hello world</string>
+    <string name="news_picture_show">照片秀</string>
+    <string name="news_pics_Title">图片</string>
+    <string name="news_video_Title">视频</string>
+    <string name="news_weather_Title">天气</string>
+    <string name="news_map_Title">地图</string>
+    <string name="news_more_Title">更多</string>
+    <string name="main_news_title">新闻快讯</string>
+    <string name="web_news_title">新闻详情</string>
+    <string name="pic_news_title">图片新闻</string>
+    <string name="change_place_title">选择城市</string>
+    <string name="auto_complete_title">搜索城市</string>
+
+    <!-- Channel 专用 -->
+    <string name="channel_manager_title">频道管理</string>
+    <string name="channel_my_channel">我的频道</string>
+    <string name="channel_more_channel">更多频道</string>
+    <string name="subscribe_manager_category_info">单击增删频道</string>
+    <string name="channel_my_channel_info">单击增删频道，长按拖拽排序</string>
+
+</resources>

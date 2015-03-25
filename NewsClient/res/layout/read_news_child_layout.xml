@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/news_list_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:id="@+id/news_list_viewpager_showTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="125dp"
+        android:background="@drawable/profile_cell_down_shadow" />
+
+    <ImageView
+        android:id="@+id/news_list_viewpager_dot4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="130dp"
+        android:contentDescription="@null"
+        android:src="@drawable/read_news_dot_normal" />
+
+    <ImageView
+        android:id="@+id/news_list_viewpager_dot3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="130dp"
+        android:layout_toLeftOf="@id/news_list_viewpager_dot4"
+        android:contentDescription="@null"
+        android:src="@drawable/read_news_dot_gray" />
+
+    <ImageView
+        android:id="@+id/news_list_viewpager_dot2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="130dp"
+        android:layout_toLeftOf="@id/news_list_viewpager_dot3"
+        android:contentDescription="@null"
+        android:src="@drawable/read_news_dot_normal" />
+
+    <ImageView
+        android:id="@+id/news_list_viewpager_dot1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="130dp"
+        android:layout_toLeftOf="@id/news_list_viewpager_dot2"
+        android:contentDescription="@null"
+        android:src="@drawable/read_news_dot_normal" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/news_list_viewpager" />
+
+</RelativeLayout>

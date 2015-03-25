@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mian_title_layout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/news_title_bgn_read" >
+    <ImageView
+        android:id="@+id/titlebar_left_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="7.5dp"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:background="@drawable/custom_titlebar_left_selector"
+        />
+    <TextView
+        android:id="@+id/titlebar_middle_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="新聞快訊"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+    <ImageView
+        android:id="@+id/titlebar_right_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:clickable="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+         android:visibility="gone"
+        android:background="@drawable/custom_titlebar_right_selector"/>
+</RelativeLayout>

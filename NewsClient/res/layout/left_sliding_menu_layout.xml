@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sliding_left_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sliding_pc_main_bg" >
+
+    <RelativeLayout
+        android:id="@+id/news_pic_layout"
+        style="@style/Sliding_menu_layout_style" >
+
+        <!-- android:onClick="onPicNewsClicked"> -->
+
+        <ImageView
+            android:id="@+id/news_pic_pic"
+            style="@style/Sliding_menu_img_style"
+            android:contentDescription="@null"
+            android:src="@drawable/sliding_navigation_tab_pics" />
+
+        <TextView
+            android:id="@+id/news_pic_txt"
+            style="@style/Sliding_menu_text_style"
+            android:layout_toRightOf="@id/news_pic_pic"
+            android:text="@string/news_pics_Title" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/news_video_layout"
+        style="@style/Sliding_menu_layout_style"
+        android:layout_below="@id/news_pic_layout" >
+
+        <!-- android:onClick="onVideoNewsClicked"> -->
+
+        <ImageView
+            android:id="@+id/news_video_pic"
+            style="@style/Sliding_menu_img_style"
+            android:contentDescription="@null"
+            android:src="@drawable/sliding_navigation_tab_video" />
+
+        <TextView
+            android:id="@+id/news_video_txt"
+            style="@style/Sliding_menu_text_style"
+            android:layout_toRightOf="@id/news_video_pic"
+            android:text="@string/news_video_Title" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/news_weather_layout"
+        style="@style/Sliding_menu_layout_style"
+        android:layout_below="@id/news_video_layout" >
+
+        <!-- android:onClick="onWeatherClicked"> -->
+
+        <ImageView
+            android:id="@+id/news_weather_pic"
+            style="@style/Sliding_menu_img_style"
+            android:contentDescription="@null"
+            android:src="@drawable/sliding_navigation_tab_weather" />
+
+        <TextView
+            android:id="@+id/news_weather_txt"
+            style="@style/Sliding_menu_text_style"
+            android:layout_toRightOf="@id/news_weather_pic"
+            android:text="@string/news_weather_Title" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/news_map_layout"
+        style="@style/Sliding_menu_layout_style"
+        android:layout_below="@id/news_weather_layout" >
+        <ImageView
+            android:id="@+id/news_map_pic"
+            style="@style/Sliding_menu_img_style"
+            android:contentDescription="@null"
+            android:src="@drawable/sliding_navigation_tab_map_1" />
+
+        <TextView
+            android:id="@+id/news_map_txt"
+            style="@style/Sliding_menu_text_style"
+            android:layout_toRightOf="@id/news_map_pic"
+            android:text="@string/news_map_Title" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/news_more_layout"
+        style="@style/Sliding_menu_layout_style"
+        android:layout_below="@id/news_map_layout" >
+
+        <!-- android:onClick="onMoreClicked"> -->
+
+        <ImageView
+            android:id="@+id/news_more_pic"
+            style="@style/Sliding_menu_img_style"
+            android:contentDescription="@null"
+            android:src="@drawable/sliding_navigation_tab_more" />
+
+        <TextView
+            android:id="@+id/news_more_txt"
+            style="@style/Sliding_menu_text_style"
+            android:layout_toRightOf="@id/news_more_pic"
+            android:text="@string/news_more_Title" />
+    </RelativeLayout>
+
+</RelativeLayout>
