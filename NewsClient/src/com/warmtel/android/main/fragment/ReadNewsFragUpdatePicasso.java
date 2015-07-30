@@ -191,28 +191,19 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 				switch (type) {
 				case TYPE_TXT:
 					viewHolder = new ViewHolder();
-					convertView = inflater.inflate(
-							R.layout.read_news_child_item_layout, null);
-					viewHolder.digestRead = (TextView) convertView
-							.findViewById(R.id.read_news_show_digest);
-					viewHolder.titleRead = (TextView) convertView
-							.findViewById(R.id.read_news_show_title);
-					viewHolder.imageRead = (ImageView) convertView
-							.findViewById(R.id.read_news_show_pic);
+					convertView = inflater.inflate(R.layout.read_news_child_item_layout, null);
+					viewHolder.digestRead = (TextView) convertView.findViewById(R.id.read_news_show_digest);
+					viewHolder.titleRead = (TextView) convertView.findViewById(R.id.read_news_show_title);
+					viewHolder.imageRead = (ImageView) convertView.findViewById(R.id.read_news_show_pic);
 					convertView.setTag(viewHolder);
 					break;
 				case TYPE_IMG:
 					viewHolder_IMG = new ViewHolder_IMG();
-					convertView = inflater.inflate(
-							R.layout.read_news_child_item_layout_img, null);
-					viewHolder_IMG.titleRead_img = (TextView) convertView
-							.findViewById(R.id.read_news_img_title);
-					viewHolder_IMG.imageRead_1 = (ImageView) convertView
-							.findViewById(R.id.read_news_img_pic1);
-					viewHolder_IMG.imageRead_2 = (ImageView) convertView
-							.findViewById(R.id.read_news_img_pic2);
-					viewHolder_IMG.imageRead_3 = (ImageView) convertView
-							.findViewById(R.id.read_news_img_pic3);
+					convertView = inflater.inflate(R.layout.read_news_child_item_layout_img, null);
+					viewHolder_IMG.titleRead_img = (TextView) convertView.findViewById(R.id.read_news_img_title);
+					viewHolder_IMG.imageRead_1 = (ImageView) convertView.findViewById(R.id.read_news_img_pic1);
+					viewHolder_IMG.imageRead_2 = (ImageView) convertView.findViewById(R.id.read_news_img_pic2);
+					viewHolder_IMG.imageRead_3 = (ImageView) convertView.findViewById(R.id.read_news_img_pic3);
 					convertView.setTag(viewHolder_IMG);
 					break;
 				default:

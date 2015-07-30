@@ -44,7 +44,7 @@ public class SlidingActivityHelper {
 	 */
 	public void onCreate(Bundle savedInstanceState) {
 //		int sliding_menu = mActivity.getResources().getIdentifier("sliding_menu_main_layout", "layout", mActivity.getPackageName());
-		mSlidingMenu = (SlidingMenu) LayoutInflater.from(mActivity).inflate(R.layout.sliding_menu_main_layout, null);
+		mSlidingMenu = (SlidingMenu) LayoutInflater.from(mActivity).inflate(R.layout.sliding_menu_layout, null);
 	}
 
 	/**

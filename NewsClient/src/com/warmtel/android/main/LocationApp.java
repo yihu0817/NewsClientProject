@@ -10,7 +10,7 @@ public class LocationApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-	
+		RequestManager.init(getApplicationContext());
 	}
 
 }

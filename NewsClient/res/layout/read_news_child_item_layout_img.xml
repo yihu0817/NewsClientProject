@@ -13,7 +13,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="27岁女孩出任上市公司董事长"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/read_news_img_pic1"

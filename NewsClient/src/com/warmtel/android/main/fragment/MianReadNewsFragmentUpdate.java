@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.warmtel.android.R;
-import com.warmtel.android.common.configs.Logs;
 import com.warmtel.android.common.widget.MyOneCustomTitleBar;
 import com.warmtel.android.common.widget.PagerSlidingTabStripMine;
 import com.warmtel.android.main.useful.NewsInfo;
@@ -28,7 +27,7 @@ import com.warmtel.android.main.useful.NewsInfo;
  * update信息:
  * 1.2014.10.24 封装了添加Fragment和Title的方法
  * 2.2014.10.24 自定义控件替换MyOneCustomTitleBar之前的Title布局
- * @author Administrator
+ * @author viktor
  *
  */
 public class MianReadNewsFragmentUpdate extends Fragment {
@@ -61,25 +60,18 @@ public class MianReadNewsFragmentUpdate extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		Logs.v("MianReadNewsFragmentUpdate   onCreateView");
-		View v = inflater.inflate(R.layout.read_news_fragment_mycustom_layout,
-				container, false);
-		mPagerSliding = (PagerSlidingTabStripMine) v
-				.findViewById(R.id.pagerSlidingTabstrip);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.read_news_fragment_mycustom_layout,container, false);
+		mPagerSliding = (PagerSlidingTabStripMine) v.findViewById(R.id.pagerSlidingTabstrip);
 		mCustomTitleBar = (MyOneCustomTitleBar) v.findViewById(R.id.readnews_custom_titlebar);
 		mViewPager = (ViewPager) v.findViewById(R.id.main_viewpager);
 		initFrag();
-		mViewPager.setAdapter(new FragPagerAdapter(getActivity()
-				.getSupportFragmentManager(), mListTitles, mListFragments));
+		mViewPager.setAdapter(new FragPagerAdapter(getActivity().getSupportFragmentManager(), mListTitles, mListFragments));
 		// 此方法重要
 		mPagerSliding.setViewPager(mViewPager);
 		mCustomTitleBar.setOnCustomClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Logs.v("MianReadNewsFragmentUpdate   onClick");
 				mCallback.onTitlleClickListener(v);
 			}
 		});

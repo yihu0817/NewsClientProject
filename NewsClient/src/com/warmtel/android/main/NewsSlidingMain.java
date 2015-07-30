@@ -93,9 +93,9 @@ public class NewsSlidingMain extends SlidingFragmentActivity  implements onMenuC
 			}
 			break;
 		case R.id.news_weather_layout:
-			Toast.makeText(this, "onWeather",Toast.LENGTH_SHORT ).show();
-			Intent intentWeather=new Intent("scxh.intent.action.weatherShow");
-	        startActivity(intentWeather);
+			Toast.makeText(this, "天气模块正在开发中...",Toast.LENGTH_SHORT ).show();
+//			Intent intentWeather=new Intent("scxh.intent.action.weatherShow");
+//	        startActivity(intentWeather);
 	        //如果显示的是菜单，就显示回正文
 	        if(menu.isMenuShowing())
 			{
@@ -106,9 +106,9 @@ public class NewsSlidingMain extends SlidingFragmentActivity  implements onMenuC
 			}
 			break;
 		case R.id.news_map_layout:
-			Toast.makeText(this, "onMap",Toast.LENGTH_SHORT ).show();
-			Intent intentmap=new Intent("scxh.intent.action.locationMap");
-	        startActivity(intentmap);
+			Toast.makeText(this, "地图模块正在开发中...",Toast.LENGTH_SHORT ).show();
+//			Intent intentmap=new Intent("scxh.intent.action.locationMap");
+//	        startActivity(intentmap);
 	        //如果显示的是菜单，就显示回正文
 	        if(menu.isMenuShowing())
 			{
@@ -119,7 +119,7 @@ public class NewsSlidingMain extends SlidingFragmentActivity  implements onMenuC
 			}
 			break;
 		case R.id.news_more_layout:
-			Toast.makeText(this, "onMore",Toast.LENGTH_SHORT ).show();
+			Toast.makeText(this, "更多模块正在开发中...",Toast.LENGTH_SHORT ).show();
 			break;
 		default:
 			break;
