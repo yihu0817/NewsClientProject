@@ -216,7 +216,7 @@ public class PicNewsFragPicasso extends ListFragment implements OnPicNewsListene
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		PicNewsObj picObj =(PicNewsObj)parent.getAdapter().getItem(position);
-	        Toast.makeText(getActivity(),picObj.getId()+">>", Toast.LENGTH_SHORT).show();
+//	        Toast.makeText(getActivity(),picObj.getId()+">>", Toast.LENGTH_SHORT).show();
 //	        Intent intent=new Intent("scxh.intent.action.picDetail");
 	        
 	        Intent intent=new Intent("scxh.intent.action.picDetailFragAct");

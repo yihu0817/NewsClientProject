@@ -1,7 +1,8 @@
 <resources>
 
     <string name="app_name">每日新讯</string>
-    <string name="listpage_footer_text">加载中</string>
+    <string name="listpage_footer_text">加载中...</string>
+    <string name="listpage_footer_more_text">加载更多</string>
     <string name="listpage_scroll_label">滚动加载更多</string>
     <string name="frage_content_title">Test  Tiltle</string>
     <string name="frage_content_info">Test content,Hello world</string>

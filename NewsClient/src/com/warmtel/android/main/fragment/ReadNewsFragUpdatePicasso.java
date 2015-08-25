@@ -24,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyErrorHelper;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
-import com.android.volley.toolbox.StringRequest;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderLayout.PresetIndicators;
 import com.daimajia.slider.library.SliderLayout.Transformer;
@@ -35,11 +34,14 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.warmtel.android.R;
 import com.warmtel.android.common.configs.Logs;
 import com.warmtel.android.common.widget.PullRefreshListView;
+import com.warmtel.android.common.widget.PullRefreshListView.PullType;
 import com.warmtel.android.common.widget.PullRefreshListView.onLoadListener;
 import com.warmtel.android.main.RequestManager;
 import com.warmtel.android.main.act.httpweb.NewsShowWebAct;
 import com.warmtel.android.main.html.JsonParseNews;
 import com.warmtel.android.main.useful.jsonobj.ReadNewsObj;
+import com.warmtel.android.main.util.HttpConnectionUtil;
+import com.warmtel.android.main.util.HttpConnectionUtil.HttpConnectionCallback;
 
 /**
  * update信息: 1.2014.10.24 在Adapter中使用了Picasso来缓存图片 2.2014.10.24
@@ -48,6 +50,7 @@ import com.warmtel.android.main.useful.jsonobj.ReadNewsObj;
  * 
  * @author tmb
  * modify viktor 2014.11.7
+ * modify viktor 2015.8.25
  */
 public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListener, OnItemClickListener,
 		OnRefreshListener, OnSliderClickListener {
@@ -58,8 +61,10 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	private SliderLayout mSliderLayout;
 	private String mPort;
 	private int mReadStyle;
+	private View mListEmpleyLayout;
 	private SwipeRefreshLayout mSwipeRefresh;// 下拉刷新Google官方控件
-
+	private HttpConnectionUtil mHttpConnectionUtil;
+	
 	// 封装的构造方法
 	public static ReadNewsFragUpdatePicasso newInstance(String port, int read) {
 		ReadNewsFragUpdatePicasso readnewsFrag = new ReadNewsFragUpdatePicasso();
@@ -75,7 +80,11 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
+		mHttpConnectionUtil = new HttpConnectionUtil();
+		
 		View v = inflater.inflate(R.layout.read_news_child_layout_head,container, false);
+		mListEmpleyLayout = v.findViewById(R.id.listview_frame_layout);
 		// 一定要在onExcute外执行啊，不然会重复跳到第一条
 		mListView = (PullRefreshListView) v.findViewById(R.id.listview);
 		// 实例化下拉刷新控件
@@ -90,12 +99,17 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 		View mHeadV = inflater.inflate(R.layout.read_news_slider_head_layout, null);
 		mSliderLayout = (SliderLayout) mHeadV.findViewById(R.id.read_news_slider);
 		
+		mListView.setEmptyView(mListEmpleyLayout);
 		mListView.addHeaderView(mHeadV);
 		mListView.setOnLoadListener(this);
 		mListView.setOnItemClickListener(this);
+		mListView.setPullType(PullType.PRESS);
 		
 		mReadNewsAdapter = new ReadNewsAdapter(getActivity());
 		mListView.setAdapter(mReadNewsAdapter);
+		
+		
+		
 		return v;
 	}
 
@@ -107,11 +121,21 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 		mReadStyle = bundle.getInt("readStyle");
 		mPort = bundle.getString("portStyle");
 		
-		RequestManager.addRequest(
-				new StringRequest(JsonParseNews
-						.getUrl(mCurrentPage, mReadStyle), responseListener(),
-						errorListener()), this);
+//		RequestManager.addRequest(
+//				new StringRequest(JsonParseNews
+//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
+//						errorListener()), this);
 
+		
+		mHttpConnectionUtil.asyncConnect(JsonParseNews
+				.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
+					
+					@Override
+					public void execute(String response) {
+						List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
+						onExcute(readList);
+					}
+				});
 	}
 
 	/**
@@ -228,7 +252,7 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 				viewHolder.titleRead.setText(readObj.getTitle());
 
 				ImageListener listener = ImageLoader.getImageListener(viewHolder.imageRead, 
-						R.drawable.loading_pin, android.R.drawable.ic_delete);
+						R.drawable.loading_pin2, android.R.drawable.ic_delete);
 				RequestManager.getImageLoader().get(readObj.getShowPic(), listener);
 				
 				break;
@@ -236,17 +260,17 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 				viewHolder_IMG.titleRead_img.setText(readObj.getTitle());
 
 				ImageListener imageListener = ImageLoader.getImageListener(viewHolder_IMG.imageRead_1, 
-						R.drawable.loading_pin, android.R.drawable.ic_delete);
+						R.drawable.loading_pin2, android.R.drawable.ic_delete);
 				RequestManager.getImageLoader().get(readObj.getShowPic(), imageListener);
 				
 				if (readObj.getImgArray().size() >= 2) {
 					ImageListener imageListener1 = ImageLoader.getImageListener(viewHolder_IMG.imageRead_2, 
-							R.drawable.loading_pin, android.R.drawable.ic_delete);
-					RequestManager.getImageLoader().get(readObj.getShowPic(), imageListener1);
+							R.drawable.loading_pin2, android.R.drawable.ic_delete);
+					RequestManager.getImageLoader().get(readObj.getImgArray().get(0), imageListener1);
 					
 					ImageListener imageListener2 = ImageLoader.getImageListener(viewHolder_IMG.imageRead_3, 
-							R.drawable.loading_pin, android.R.drawable.ic_delete);
-					RequestManager.getImageLoader().get(readObj.getShowPic(), imageListener2);
+							R.drawable.loading_pin2, android.R.drawable.ic_delete);
+					RequestManager.getImageLoader().get(readObj.getImgArray().get(1), imageListener2);
 					
 				}
 				break;
@@ -274,10 +298,23 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	public void onRefresh() {
 		mCurrentPage = 0;
 		mSliderLayout.removeAllSliders();// 移除所有的Slider
-		RequestManager.addRequest(
-				new StringRequest(JsonParseNews
-						.getUrl(mCurrentPage, mReadStyle), responseListener(),
-						errorListener()), this);
+		
+		/**用下面方法 responseListener()被回调三次 为什么?*/
+//		RequestManager.addRequest(
+//				new StringRequest(JsonParseNews
+//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
+//						errorListener()), this);
+		
+		
+		mHttpConnectionUtil.asyncConnect(JsonParseNews
+						.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
+							
+							@Override
+							public void execute(String response) {
+								List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
+								onExcute(readList);
+							}
+						});
 		
 		mSwipeRefresh.setRefreshing(false);
 	}
@@ -285,18 +322,29 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	@Override
 	public void onLoadMore() {
 		mCurrentPage++;
-		RequestManager.addRequest(
-				new StringRequest(JsonParseNews
-						.getUrl(mCurrentPage, mReadStyle), responseListener(),
-						errorListener()), this);
+//		RequestManager.addRequest(
+//				new StringRequest(JsonParseNews
+//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
+//						errorListener()), this);
+		
+		mHttpConnectionUtil.asyncConnect(JsonParseNews
+				.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
+					
+					@Override
+					public void execute(String response) {
+						List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
+						onExcute(readList);
+						mListView.onLoadMoreFinish();
+					}
+				});
+
 
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		ReadNewsObj readobj = (ReadNewsObj) parent.getAdapter().getItem(
-				position);
+		ReadNewsObj readobj = (ReadNewsObj) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(getActivity(),NewsShowWebAct.class);
 		intent.putExtra("docID", readobj.getDocId());
 		startActivity(intent);
@@ -324,8 +372,7 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 		return new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
-				List<ReadNewsObj> readList = new ArrayList<ReadNewsObj>();
-				readList = JsonParseNews.getList2Json(response, mPort);
+				List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
 				onExcute(readList);
 			}
 		};
@@ -346,7 +393,8 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 				TextSliderView textSlider = new TextSliderView(getActivity());
 				textSlider.description(readList.get(i).getTitle())
 						.image(readList.get(i).getShowPic())
-						.setScaleType(BaseSliderView.ScaleType.Fit);
+						.setScaleType(BaseSliderView.ScaleType.CenterCrop)
+						;
 				// 添加进SliderLayout
 				mSliderLayout.addSlider(textSlider);
 				Logs.v(textSlider.getDescription());
@@ -366,11 +414,11 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 			// //停止自动放映
 			// mSliderLayout.stopAutoCycle();
 			// 指示符是否显示
-			mSliderLayout.setIndicatorVisibility(IndicatorVisibility.Invisible);
+			mSliderLayout.setIndicatorVisibility(IndicatorVisibility.Visible);
 			// 幻灯片切换时间
-			mSliderLayout.setDuration(4000);
+//			mSliderLayout.setDuration(4000);
 			// 幻灯片转化时间 ，停顿时间(显示时间)=切换时间-转化时间
-			mSliderLayout.setSliderTransformDuration(1500, null);
+//			mSliderLayout.setSliderTransformDuration(1500, null);
 		}
 
 	}

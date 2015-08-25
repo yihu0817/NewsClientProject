@@ -31,7 +31,7 @@ import com.warmtel.android.main.util.HttpConnectionUtil.HttpMethod;
 /**
  * 
  * @author Administrator 1.先建立连接 2.获取Json数据 3.解析Json数据 4.获取网络图片 5.将资源定义给Adapter
- *
+ * 
  */
 public class JsonParseNews {
 	public static int sPageNo = NewsInfo.sPageNo; // 表示初始界面显示第一页
@@ -75,7 +75,8 @@ public class JsonParseNews {
 		this.onCityInfoListener = onCityInfoListener;
 	}
 
-	public void setOnWeatherJsonListener(OnWeatherJsonListener onWeatherJsonListener) {
+	public void setOnWeatherJsonListener(
+			OnWeatherJsonListener onWeatherJsonListener) {
 		this.onWeatherJsonListener = onWeatherJsonListener;
 	}
 
@@ -145,28 +146,23 @@ public class JsonParseNews {
 			String title = headLineChild.getString("title");
 			String showPic = headLineChild.getString("imgsrc");
 			String docId = headLineChild.getString("docid");
-			JSONArray imgArray=headLineChild.getJSONArray("imgextra");
-			List<String> imgArrays=new ArrayList<String>();
-			if(imgArray!=null)
-			{
-				JSONObject obj0=(JSONObject) imgArray.getJSONObject(0);
-				imgArrays.add(obj0.getString("imgsrc"));
-				JSONObject obj1=(JSONObject) imgArray.getJSONObject(1);
-				imgArrays.add(obj1.getString("imgsrc"));
+			JSONArray imgArray = headLineChild.getJSONArray("imgextra");
+			List<String> imgArrayList = new ArrayList<String>();
+			if (imgArray != null) {
+				JSONObject obj0 = (JSONObject) imgArray.getJSONObject(0);
+				imgArrayList.add(obj0.getString("imgsrc"));
+				JSONObject obj1 = (JSONObject) imgArray.getJSONObject(1);
+				imgArrayList.add(obj1.getString("imgsrc"));
 			}
 			ReadNewsObj readObj = new ReadNewsObj();
 			readObj.setDigest(digest);
 			readObj.setTitle(title);
 			readObj.setShowPic(showPic);
 			readObj.setDocId(docId);
-			readObj.setImgArray(imgArrays);
+			readObj.setImgArray(imgArrayList);
 			readList.add(readObj);
-			// Logs.e("headline>>>>>"+(headLine.size()-1-1));//计算新闻列表一篇总数
-			// Logs.v(digest);
-			// Logs.e(title);
-			// Logs.v(showPic);
 		}
-		Logs.e("getList2Json");
+		Logs.e("getList2Json >>>>");
 		return readList;
 	}
 
@@ -243,7 +239,8 @@ public class JsonParseNews {
 	 */
 	public NewsInfoUseObj getNewsInfoObj2Json(String response, String docId) {
 		// List<NewsInfoUseObj> newsInfoList = new ArrayList<NewsInfoUseObj>();
-		// Logs.v(response);
+		 Logs.v(response);
+		 
 		JSONObject allObj = JSONObject.parseObject(response);
 		JSONObject localObj = allObj.getJSONObject(docId);// 得到以这个端口命名的Json对象
 		// 查找需要的信息
@@ -469,7 +466,9 @@ public class JsonParseNews {
 			String ptime = listChild.getString("ptime");// 编辑时间
 			String m3u8_url = listChild.getString("m3u8_url");
 			String vid = listChild.getString("vid");
-			VideoModelObj videoModelObj=new VideoModelObj(cover, title, replyCount, mp4_url, length, mp4Hd_url, playersize, m3u8Hd_url, ptime, m3u8_url, vid);
+			VideoModelObj videoModelObj = new VideoModelObj(cover, title,
+					replyCount, mp4_url, length, mp4Hd_url, playersize,
+					m3u8Hd_url, ptime, m3u8_url, vid);
 			videoList.add(videoModelObj);
 		}
 		return videoList;
@@ -488,100 +487,111 @@ public class JsonParseNews {
 					}
 				});
 	}
+
 	// 封装异步任务方法
-	public void getVedioListHttpConn(String url,final String port) {
+	public void getVedioListHttpConn(String url, final String port) {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
-			@Override
-			public void execute(String response) {
-				Logs.v("getVedioListHttpConn   start");
-				List<VideoModelObj> videoList = getVideoList2Json(response,port);
-				onVideoNewsListener.onVideoNewsList(videoList);
-				Logs.e("getVedioListHttpConn   end");
-			}
-		});
+					@Override
+					public void execute(String response) {
+						Logs.v("getVedioListHttpConn   start");
+						List<VideoModelObj> videoList = getVideoList2Json(
+								response, port);
+						onVideoNewsListener.onVideoNewsList(videoList);
+						Logs.e("getVedioListHttpConn   end");
+					}
+				});
 	}
+
 	// 提供接口给实例化他的类使用
 	public interface OnVideoNewsListener {
 		public void onVideoNewsList(List<VideoModelObj> videoList);
 	}
-/**
- * 获取城市数据
- */
-	//读取asset里面的File并返回一个字符串
-	public String readAssetFile(String FileName,Context context) throws IOException
-	{
-		InputStream is=context.getAssets().open(FileName);
-		int size=is.available();
-		byte[] bt=new byte[size];
-		//读取流并将数据存入byte[]数组
+
+	/**
+	 * 获取城市数据
+	 */
+	// 读取asset里面的File并返回一个字符串
+	public String readAssetFile(String FileName, Context context)
+			throws IOException {
+		InputStream is = context.getAssets().open(FileName);
+		int size = is.available();
+		byte[] bt = new byte[size];
+		// 读取流并将数据存入byte[]数组
 		is.read(bt);
-		String info=new String(bt,"UTF-8");
+		String info = new String(bt, "UTF-8");
 		return info;
 	}
-	public CityAllInfo getCityInfo2Object(Context context)
-	{
+
+	public CityAllInfo getCityInfo2Object(Context context) {
 		try {
-			String json=readAssetFile("city_info_txt",context);
-			CityAllInfo city=JSON.parseObject(json, CityAllInfo.class);
-			Logs.v("userName:"+city.getCity_info().get(0).getCity().get(0).getCity_name()+
-					",email:"+city.getCity_info().get(0).getCity().get(0).getCity_code());
+			String json = readAssetFile("city_info_txt", context);
+			CityAllInfo city = JSON.parseObject(json, CityAllInfo.class);
+			Logs.v("userName:"
+					+ city.getCity_info().get(0).getCity().get(0)
+							.getCity_name()
+					+ ",email:"
+					+ city.getCity_info().get(0).getCity().get(0)
+							.getCity_code());
 			return city;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	private CityInfoAsyncTask mCityInfoAsyncTask;
-	public void getCityInfoAsync(Context context)
-	{
-		mCityInfoAsyncTask=new CityInfoAsyncTask();
+
+	public void getCityInfoAsync(Context context) {
+		mCityInfoAsyncTask = new CityInfoAsyncTask();
 		mCityInfoAsyncTask.execute(context);
 	}
-	
-	class CityInfoAsyncTask extends  AsyncTask<Context, Void, CityAllInfo>
-	{
+
+	class CityInfoAsyncTask extends AsyncTask<Context, Void, CityAllInfo> {
 		@Override
 		protected CityAllInfo doInBackground(Context... params) {
 			return getCityInfo2Object(params[0]);
 		}
+
 		@Override
 		protected void onPostExecute(CityAllInfo result) {
 			onCityInfoListener.onCityInfo(result);
 		}
 
 	}
-	
+
 	// 提供接口给实例化他的类使用
-		public interface OnCityInfoListener {
-			public void onCityInfo(CityAllInfo city);
-		}
-		/**
-		 * 天气解析
-		 * 
-		 */
-		// 封装异步加载数据后返回json字符串的解析
-		public WeatherJson getWeatherList2Json(String response) {
-			// List<VideoModelObj> videoList = new ArrayList<VideoModelObj>();
-			WeatherJson weatherJson= JSON.parseObject(response,WeatherJson.class);
-			return weatherJson;
-		}
-		// 封装异步任务方法
-		public void getWeatherListHttpConn(String url) {
-			httpConn.asyncConnect(url, HttpMethod.GET,
-					new HttpConnectionCallback() {
-						@Override
-						public void execute(String response) {
-							Logs.v("getVedioListHttpConn   start");
-							WeatherJson weatherJson=getWeatherList2Json(response);
-							onWeatherJsonListener.onWeatherJsonList(weatherJson);
-							Logs.e("getVedioListHttpConn   end");
-						}
-					});
-		}
-		// 提供接口给实例化他的类使用
-		public interface OnWeatherJsonListener {
-			public void onWeatherJsonList(WeatherJson weatherJson);
-		}
+	public interface OnCityInfoListener {
+		public void onCityInfo(CityAllInfo city);
+	}
+
+	/**
+	 * 天气解析
+	 * 
+	 */
+	// 封装异步加载数据后返回json字符串的解析
+	public WeatherJson getWeatherList2Json(String response) {
+		// List<VideoModelObj> videoList = new ArrayList<VideoModelObj>();
+		WeatherJson weatherJson = JSON.parseObject(response, WeatherJson.class);
+		return weatherJson;
+	}
+
+	// 封装异步任务方法
+	public void getWeatherListHttpConn(String url) {
+		httpConn.asyncConnect(url, HttpMethod.GET,
+				new HttpConnectionCallback() {
+					@Override
+					public void execute(String response) {
+						Logs.v("getVedioListHttpConn   start");
+						WeatherJson weatherJson = getWeatherList2Json(response);
+						onWeatherJsonListener.onWeatherJsonList(weatherJson);
+						Logs.e("getVedioListHttpConn   end");
+					}
+				});
+	}
+
+	// 提供接口给实例化他的类使用
+	public interface OnWeatherJsonListener {
+		public void onWeatherJsonList(WeatherJson weatherJson);
+	}
 }

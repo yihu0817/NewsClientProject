@@ -55,7 +55,6 @@ public class MianReadNewsFragmentUpdate extends Fragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onActivityCreated(savedInstanceState);
 	}
 
