@@ -17,7 +17,6 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -25,16 +24,30 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.util.Log;
+
+import com.warmtel.android.common.configs.Logs;
 
 public class HttpConnectionUtil {
 	private final static String TAG = "HttpConnectionUtil";
+
 	public static enum HttpMethod {
 		GET, POST
 	}
+
+	private Context mContext;
+
+	public HttpConnectionUtil(Context context) {
+		mContext = context;
+	}
+
+	public HttpConnectionUtil() {
+
+	}
+
 	/**
 	 * 回调接口
 	 */
@@ -46,155 +59,105 @@ public class HttpConnectionUtil {
 		 *            the response of http request. The value will be null if
 		 *            any error occur.
 		 */
-		void execute(String response);
+		void onResponse(String response);
+
+		void onErrorResponse(String errorMessage);
 	}
+
 	/**
-	 * 异步连接
+	 * 不缓存无参数
 	 * 
 	 * @param url
-	 *            网址
 	 * @param method
-	 *            Http方法,POST跟GET
 	 * @param callback
-	 *            回调方法,返回给页面或其他的数据
 	 */
 	public void asyncConnect(final String url, final HttpMethod method,
 			final HttpConnectionCallback callback) {
-		asyncConnect(url, null, method, callback);
+		asyncConnect(url, null, method, null, callback);
 	}
 
 	/**
-	 * 同步方法
+	 * 有缓存无参数
 	 * 
 	 * @param url
-	 *            网址
 	 * @param method
-	 *            Http方法,POST跟GET
+	 * @param cacheUrl
 	 * @param callback
-	 *            回调方法,返回给页面或其他的数据
 	 */
-	public void syncConnect(final String url, final HttpMethod method,
-			final HttpConnectionCallback callback) {
-		syncConnect(url, null, method, callback);
+	public void asyncConnect(final String url, final HttpMethod method,
+			final String cacheUrl, final HttpConnectionCallback callback) {
+		asyncConnect(url, null, method, cacheUrl, callback);
 	}
 
 	/**
-	 * 异步带参数方法
+	 * 无缓存有参数
 	 * 
 	 * @param url
-	 *            网址
 	 * @param params
-	 *            POST或GET要传递的参数
 	 * @param method
-	 *            方法,POST或GET
 	 * @param callback
-	 *            回调方法
 	 */
 	public void asyncConnect(final String url,
 			final Map<String, String> params, final HttpMethod method,
 			final HttpConnectionCallback callback) {
+		asyncConnect(url, params, method, null, callback);
+	}
+
+	/**
+	 * 有缓存有参数
+	 * 
+	 * @param url
+	 * @param params
+	 * @param method
+	 * @param cacheUrlK
+	 * @param callback
+	 */
+	public void asyncConnect(final String url,
+			final Map<String, String> params, final HttpMethod method,
+			final String cacheUrlK, final HttpConnectionCallback callback) {
 
 		new AsyncTask<Void, Void, String>() {
 			@Override
 			protected String doInBackground(Void... param) {
-				return asyncConnects(url, params, method, callback);
+				try {
+					return asyncConnects(url, params, method, cacheUrlK,
+							callback);
+				} catch (MessagingException e) {
+					Logs.e("doinbackgroud MessagingException >>>>>");
+					callback.onErrorResponse(e.getMessage());
+					return null;
+				}
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
-				callback.execute(result);
 				super.onPostExecute(result);
+				if (result != null)
+					callback.onResponse(result);
+
 			}
 
 		}.execute();
-
-	}
-
-	/**
-	 * 同步带参数方法
-	 * 
-	 * @param url
-	 *            网址
-	 * @param params
-	 *            POST或GET要传递的参数
-	 * @param method
-	 *            方法,POST或GET
-	 * @param callback
-	 *            回调方法
-	 */
-	public void syncConnect(final String url, final Map<String, String> params,
-			final HttpMethod method, final HttpConnectionCallback callback) {
-		new Handler().post(new Runnable() {
-			@Override
-			public void run() {
-				syncConnects(url, params, method, callback);
-			}
-		});
-
-	}
-
-	/**
-	 * 同步带参数方法
-	 * 
-	 * @param url
-	 *            网址
-	 * @param params
-	 *            POST或GET要传递的参数
-	 * @param method
-	 *            方法,POST或GET
-	 * @param callback
-	 *            回调方法
-	 */
-	public void syncConnects(final String url,
-			final Map<String, String> params, final HttpMethod method,
-			final HttpConnectionCallback callback) {
-		String json = null;
-		BufferedReader reader = null;
-		InputStream is = null;
-		try {
-			HttpClient client = new DefaultHttpClient();
-			HttpUriRequest request = getRequest(url, params, method);
-			HttpResponse response = client.execute(request);
-
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				is = response.getEntity().getContent();
-				reader = new BufferedReader(new InputStreamReader(is));
-				StringBuilder sb = new StringBuilder();
-				for (String s = reader.readLine(); s != null; s = reader
-						.readLine()) {
-					sb.append(s);
-				}
-
-				json = sb.toString();
-			}
-		} catch (ClientProtocolException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-				if (is != null) {
-					is.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		callback.execute(json);
 	}
 
 	public String asyncConnects(final String url,
 			final Map<String, String> params, final HttpMethod method,
-			final HttpConnectionCallback callback) {
+			final String cacheUrlKey, final HttpConnectionCallback callback)
+			throws MessagingException {
 		String json = null;
 		BufferedReader reader = null;
 		InputStream is = null;
 		try {
 			HttpClient client = new DefaultHttpClient();
+			// 请求超时
+			client.getParams().setParameter(
+					CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
+			// 读取超时
+			client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,
+					15000);
+
 			HttpUriRequest request = getRequest(url, params, method);
+
 			HttpResponse response = client.execute(request);
 
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -209,11 +172,18 @@ public class HttpConnectionUtil {
 					sb.append(line);
 				}
 				json = sb.toString();
+
+				if (cacheUrlKey != null && mContext != null && json!=null) {
+					ApiPreference.getInstance(mContext).putCache(cacheUrlKey,json);
+				}
+			} else {
+				throw new MessagingException(
+						MessagingException.SERVICE_CONNECT_ERROR, "与服务器连接错误");
 			}
-		} catch (ClientProtocolException e) {
-			Log.e(TAG, e.getMessage(), e);
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
+			e.printStackTrace();
+			throw new MessagingException(MessagingException.NET_IO_ERROR,
+					"与服务器连接超时, 请检查你的网络状态 .");
 		} finally {
 			try {
 				if (reader != null) {

@@ -92,6 +92,7 @@ public class PullRefreshListView extends ListView implements OnScrollListener {
 	}
 	public void onLoadMoreFinish(){
 		mPressProgressBar.setVisibility(View.GONE);
+		
 	}
 	/**
 	 * 移除Footer

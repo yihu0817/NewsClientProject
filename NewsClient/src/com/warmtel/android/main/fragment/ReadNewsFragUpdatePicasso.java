@@ -6,6 +6,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -40,6 +42,7 @@ import com.warmtel.android.main.RequestManager;
 import com.warmtel.android.main.act.httpweb.NewsShowWebAct;
 import com.warmtel.android.main.html.JsonParseNews;
 import com.warmtel.android.main.useful.jsonobj.ReadNewsObj;
+import com.warmtel.android.main.util.ApiPreference;
 import com.warmtel.android.main.util.HttpConnectionUtil;
 import com.warmtel.android.main.util.HttpConnectionUtil.HttpConnectionCallback;
 
@@ -50,7 +53,7 @@ import com.warmtel.android.main.util.HttpConnectionUtil.HttpConnectionCallback;
  * 
  * @author tmb
  * modify viktor 2014.11.7
- * modify viktor 2015.8.25
+ * modify viktor 2015.8.25  优化处理：1.网络异常处理 2.下拉刷新，上拉加载更多
  */
 public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListener, OnItemClickListener,
 		OnRefreshListener, OnSliderClickListener {
@@ -64,7 +67,34 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	private View mListEmpleyLayout;
 	private SwipeRefreshLayout mSwipeRefresh;// 下拉刷新Google官方控件
 	private HttpConnectionUtil mHttpConnectionUtil;
+	private final static int HANDLER_ERROR = 1;
+	private final static int HANDLER_SLIDER = 2;
+	private final static int HANDLER_LOADMORE_FINISH = 3;
 	
+	private Handler mHandler = new Handler(){
+		
+		public void handleMessage(android.os.Message msg) {
+			switch(msg.what){
+			case HANDLER_ERROR:
+				String message = (String)msg.obj;
+				Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+				break;
+			case HANDLER_SLIDER:
+				List<ReadNewsObj> readList = (List<ReadNewsObj>)msg.obj;
+				
+				mSwipeRefresh.setRefreshing(false);
+				mListView.onLoadMoreFinish();
+				
+				showReadPic(readList);
+				mReadNewsAdapter.addDatas(mCurrentPage, readList);
+				
+				break;
+			case HANDLER_LOADMORE_FINISH:
+				mListView.onLoadMoreFinish();
+				break;
+			}
+		}
+	};
 	// 封装的构造方法
 	public static ReadNewsFragUpdatePicasso newInstance(String port, int read) {
 		ReadNewsFragUpdatePicasso readnewsFrag = new ReadNewsFragUpdatePicasso();
@@ -81,7 +111,7 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		mHttpConnectionUtil = new HttpConnectionUtil();
+		mHttpConnectionUtil = new HttpConnectionUtil(getActivity());
 		
 		View v = inflater.inflate(R.layout.read_news_child_layout_head,container, false);
 		mListEmpleyLayout = v.findViewById(R.id.listview_frame_layout);
@@ -108,8 +138,6 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 		mReadNewsAdapter = new ReadNewsAdapter(getActivity());
 		mListView.setAdapter(mReadNewsAdapter);
 		
-		
-		
 		return v;
 	}
 
@@ -127,13 +155,97 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 //						errorListener()), this);
 
 		
+		final String url = JsonParseNews.getUrl(mCurrentPage, mReadStyle);
+		mHttpConnectionUtil.asyncConnect(url, HttpConnectionUtil.HttpMethod.GET,url,new HttpConnectionCallback() {
+					
+					@Override
+					public void onResponse(String response) {
+						List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
+						onExcute(readList);
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						Message msg = Message.obtain();
+						msg.what = HANDLER_ERROR;
+						msg.obj = errorMessage;
+						mHandler.sendMessage(msg);
+						
+						String cacheJson = ApiPreference.getInstance(getActivity()).getCache(url);
+						if(cacheJson != null){
+							List<ReadNewsObj> readList = JsonParseNews.getList2Json(cacheJson, mPort);
+							onExcute(readList);
+						}
+					}
+				});
+	}
+	@Override
+	public void onRefresh() {
+		mCurrentPage = 0;
+		
+		/**用下面方法 responseListener()被回调三次 为什么?*/
+//		RequestManager.addRequest(
+//				new StringRequest(JsonParseNews
+//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
+//						errorListener()), this);
+		
+		
+		mHttpConnectionUtil.asyncConnect(JsonParseNews
+						.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
+							
+							@Override
+							public void onResponse(String response) {
+								List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
+								onExcute(readList);
+							}
+
+							@Override
+							public void onErrorResponse(String errorMessage) {
+								Message msg = Message.obtain();
+								msg.what = HANDLER_ERROR;
+								msg.obj = errorMessage;
+								mHandler.sendMessage(msg);
+								
+								String cacheJson = ApiPreference.getInstance(getActivity()).getCache(JsonParseNews.getUrl(mCurrentPage, mReadStyle));
+								if(cacheJson != null){
+									List<ReadNewsObj> readList = JsonParseNews.getList2Json(cacheJson, mPort);
+									onExcute(readList);
+								}
+							}
+						});
+		
+		
+	}
+	
+	@Override
+	public void onLoadMore() {
+		mCurrentPage++;
+//		RequestManager.addRequest(
+//				new StringRequest(JsonParseNews
+//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
+//						errorListener()), this);
+		
 		mHttpConnectionUtil.asyncConnect(JsonParseNews
 				.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
 					
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
 						onExcute(readList);
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						Message msg = Message.obtain();
+						msg.what = HANDLER_ERROR;
+						msg.obj = errorMessage;
+						mHandler.sendMessage(msg);
+
+						msg = Message.obtain();
+						msg.what = HANDLER_LOADMORE_FINISH;
+						mHandler.sendMessage(msg);
+						
+						
 					}
 				});
 	}
@@ -294,53 +406,7 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 		}
 	}
 
-	@Override
-	public void onRefresh() {
-		mCurrentPage = 0;
-		mSliderLayout.removeAllSliders();// 移除所有的Slider
-		
-		/**用下面方法 responseListener()被回调三次 为什么?*/
-//		RequestManager.addRequest(
-//				new StringRequest(JsonParseNews
-//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
-//						errorListener()), this);
-		
-		
-		mHttpConnectionUtil.asyncConnect(JsonParseNews
-						.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
-							
-							@Override
-							public void execute(String response) {
-								List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
-								onExcute(readList);
-							}
-						});
-		
-		mSwipeRefresh.setRefreshing(false);
-	}
 	
-	@Override
-	public void onLoadMore() {
-		mCurrentPage++;
-//		RequestManager.addRequest(
-//				new StringRequest(JsonParseNews
-//						.getUrl(mCurrentPage, mReadStyle), responseListener(),
-//						errorListener()), this);
-		
-		mHttpConnectionUtil.asyncConnect(JsonParseNews
-				.getUrl(mCurrentPage, mReadStyle), HttpConnectionUtil.HttpMethod.GET,new HttpConnectionCallback() {
-					
-					@Override
-					public void execute(String response) {
-						List<ReadNewsObj> readList = JsonParseNews.getList2Json(response, mPort);
-						onExcute(readList);
-						mListView.onLoadMoreFinish();
-					}
-				});
-
-
-	}
-
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -379,13 +445,15 @@ public class ReadNewsFragUpdatePicasso extends Fragment implements onLoadListene
 	}
 	
 	public void onExcute(List<ReadNewsObj> readList) {
-		showReadPic(readList);
-		mReadNewsAdapter.addDatas(mCurrentPage, readList);
-
+		Message msg = Message.obtain();
+		msg.what = HANDLER_SLIDER;
+		msg.obj = readList;
+		mHandler.sendMessage(msg);
 	}
 
 	public void showReadPic(List<ReadNewsObj> readList) {
 		if (mCurrentPage == 0) {
+			mSliderLayout.removeAllSliders();// 移除所有的Slider
 			/**
 			 * 展示橱窗
 			 */

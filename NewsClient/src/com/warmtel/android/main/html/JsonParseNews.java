@@ -22,7 +22,6 @@ import com.warmtel.android.main.useful.jsonobj.ReadNewsImagSrcObj;
 import com.warmtel.android.main.useful.jsonobj.ReadNewsObj;
 import com.warmtel.android.main.useful.jsonobj.VideoJsonArray;
 import com.warmtel.android.main.useful.jsonobj.VideoModelObj;
-import com.warmtel.android.main.useful.jsonobj.WeatherDataObj;
 import com.warmtel.android.main.useful.jsonobj.WeatherJson;
 import com.warmtel.android.main.util.HttpConnectionUtil;
 import com.warmtel.android.main.util.HttpConnectionUtil.HttpConnectionCallback;
@@ -87,7 +86,7 @@ public class JsonParseNews {
 		httpConn.asyncConnect(readNewsUrl, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						List<ReadNewsObj> readList = new ArrayList<ReadNewsObj>();
 						readList = getList2Json(response, port);
 						// ReadNewsObj read = readList.get(1);
@@ -102,6 +101,12 @@ public class JsonParseNews {
 						}
 						testUrlListener.onExcute(mReadList);
 					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
+					}
 				});
 	}
 
@@ -111,7 +116,7 @@ public class JsonParseNews {
 		httpConn.asyncConnect(readNewsUrl, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						List<ReadNewsObj> readList = new ArrayList<ReadNewsObj>();
 						readList = getList2Json(response, port);
 						// ReadNewsObj read = readList.get(1);
@@ -131,6 +136,12 @@ public class JsonParseNews {
 						Logs.e("testURLAdd   start");
 						testUrlListener.onExcute(readList);
 						Logs.e("testURLAdd   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -304,12 +315,18 @@ public class JsonParseNews {
 		httpConn.asyncConnect(newsInfoUrl, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getNewsInfoHttpConn   start");
 						NewsInfoUseObj newsInfoObj = getNewsInfoObj2Json(
 								response, docId);
 						onNewsInfoListener.OnNewsInfo(newsInfoObj);
 						Logs.e("getNewsInfoHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -354,11 +371,17 @@ public class JsonParseNews {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getPicListHttpConn   start");
 						List<PicNewsObj> picList = getPicList2Json(response);
 						onPicNewsListener.onPicNewsList(picList);
 						Logs.e("getPicListHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -419,11 +442,17 @@ public class JsonParseNews {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getPicDetailHttpConn   start");
 						List<PicModelObj> picDetailList = getPicDetail2Json(response);
 						onPicDetailListener.onPicDetailList(picDetailList);
 						Logs.e("getPicDetailHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -479,11 +508,17 @@ public class JsonParseNews {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getVedioListHttpConn   start");
 						List<VideoModelObj> videoList = getVideoList2Json(response);
 						onVideoNewsListener.onVideoNewsList(videoList);
 						Logs.e("getVedioListHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -493,12 +528,18 @@ public class JsonParseNews {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getVedioListHttpConn   start");
 						List<VideoModelObj> videoList = getVideoList2Json(
 								response, port);
 						onVideoNewsListener.onVideoNewsList(videoList);
 						Logs.e("getVedioListHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
@@ -581,11 +622,17 @@ public class JsonParseNews {
 		httpConn.asyncConnect(url, HttpMethod.GET,
 				new HttpConnectionCallback() {
 					@Override
-					public void execute(String response) {
+					public void onResponse(String response) {
 						Logs.v("getVedioListHttpConn   start");
 						WeatherJson weatherJson = getWeatherList2Json(response);
 						onWeatherJsonListener.onWeatherJsonList(weatherJson);
 						Logs.e("getVedioListHttpConn   end");
+					}
+
+					@Override
+					public void onErrorResponse(String errorMessage) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 	}
